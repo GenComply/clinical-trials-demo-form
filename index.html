@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Demo Case Report Form</title>
+<style>
+  :root {
+    color-scheme: light;
+    --background: #F5F7FA;
+    --surface: #FFFFFF;
+    --fill: #F1F3F7;
+    --border: #E3E7EE;
+    --separator: #EDF0F5;
+    --text: #1C2024;
+    --text-muted: #5A626C;
+    --text-subtle: #6B7480;
+    --accent: #3B5BDB;
+    --accent-tint: #EEF2FF;
+    --input-border: #CDD3DC;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --background: #0F1115;
+      --surface: #191C22;
+      --fill: #23272F;
+      --border: #2A2F38;
+      --separator: #23272F;
+      --text: #F2F4F7;
+      --text-muted: #AEB5BF;
+      --text-subtle: #98A0AB;
+      --accent: #8FA5F9;
+      --accent-tint: #1E2436;
+      --input-border: #3A404B;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #0F1115;
+    --surface: #191C22;
+    --fill: #23272F;
+    --border: #2A2F38;
+    --separator: #23272F;
+    --text: #F2F4F7;
+    --text-muted: #AEB5BF;
+    --text-subtle: #98A0AB;
+    --accent: #8FA5F9;
+    --accent-tint: #1E2436;
+    --input-border: #3A404B;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 28px 16px 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin: 0 0 28px; }
+  .brand svg { width: 28px; height: 28px; flex: none; }
+  .brand strong { font-size: 16px; letter-spacing: -0.01em; }
+  .badge {
+    margin-left: auto; padding: 3px 10px; border-radius: 999px;
+    background: var(--fill); color: var(--text-muted);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+  }
+  h1 { font-size: 26px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .lead { color: var(--text-muted); margin: 0 0 20px; }
+  .guide {
+    margin: 0; padding: 18px 20px; border-radius: 12px;
+    background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .guide h2 { margin: 0 0 14px; color: var(--accent); font-size: 16px; letter-spacing: -0.01em; text-transform: none; }
+  .guide ol { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .guide li { counter-increment: step; position: relative; min-height: 26px; padding: 2px 0 0 38px; }
+  .guide li::before {
+    content: counter(step); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--accent); color: var(--surface);
+    font-size: 13px; font-weight: 700;
+  }
+  .card {
+    margin: 0; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow);
+  }
+  .subject { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .subject div { padding: 12px 16px; }
+  .subject div + div { border-left: 1px solid var(--separator); }
+  .subject dt { color: var(--text-subtle); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .subject dd { margin: 2px 0 0; font-weight: 600; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; }
+  h2 {
+    margin: 28px 4px 8px; color: var(--text-subtle);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .row {
+    display: grid; grid-template-columns: 1fr 240px; gap: 16px; align-items: center;
+    padding: 12px 16px; margin: 0; border: 0; min-width: 0;
+  }
+  .row + .row { border-top: 1px solid var(--separator); }
+  fieldset.row legend { float: left; padding: 0; }
+  .control { display: flex; align-items: center; gap: 8px; }
+  input, select {
+    font: inherit; color: inherit; width: 100%; min-height: 38px; padding: 7px 10px;
+    border: 1px solid var(--input-border); border-radius: 8px; background: var(--surface);
+  }
+  input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  select {
+    appearance: none; padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%236B7480' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 12px;
+  }
+  .unit { flex: none; width: 44px; color: var(--text-subtle); font-size: 14px; }
+  .choices { display: flex; gap: 24px; }
+  .choices label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  .choices input { width: 18px; height: 18px; min-height: 0; margin: 0; accent-color: var(--accent); }
+  @media (max-width: 560px) {
+    .subject { grid-template-columns: 1fr; }
+    .subject div + div { border-left: 0; border-top: 1px solid var(--separator); }
+    .row { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <rect width="48" height="48" rx="11" fill="#213D63"/>
+      <path d="M10 20c4.7-5.5 9.3-5.5 14 0s9.3 5.5 14 0" fill="none" stroke="#8FD3CC" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M10 32h28" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round"/>
+    </svg>
+    <strong>Staedra</strong>
+    <span class="badge">Demo</span>
+  </div>
+
+  <h1>Demo Case Report Form</h1>
+  <p class="lead">A sample page for testing the Staedra Chrome extension.</p>
+
+  <div class="guide">
+    <h2>How to test</h2>
+    <ol>
+      <li>Open the Staedra extension.</li>
+      <li>Sign in with the test account you received.</li>
+      <li>Choose the trial <strong>Phase 2 Study of NV-204 in Uncontrolled Hypertension</strong>.</li>
+      <li>Choose the patient <strong>Margaret Ellison</strong>, visit of <strong>8 Oct 2026</strong>.</li>
+      <li>When the fields are matched, press <strong>Insert</strong>: the values of the visit are written in this form.</li>
+      <li>Press <strong>Close Visit</strong>, then <strong>Mark as Sent</strong>.</li>
+    </ol>
+  </div>
+
+  <h2>Subject</h2>
+  <dl class="card subject">
+    <div><dt>Subject</dt><dd class="code">S01-001</dd></div>
+    <div><dt>Trial</dt><dd class="code">SYN-001</dd></div>
+    <div><dt>Visit</dt><dd>Screening</dd></div>
+  </dl>
+
+  <h2>Visit</h2>
+  <div class="card">
+    <div class="row">
+      <label for="visit-date">Date of visit</label>
+      <div class="control"><input id="visit-date" type="date" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <h2>Vital signs</h2>
+  <div class="card">
+    <div class="row">
+      <label for="height">Height</label>
+      <div class="control"><input id="height" type="number" step="any" autocomplete="off"><span class="unit">cm</span></div>
+    </div>
+    <div class="row">
+      <label for="weight">Weight</label>
+      <div class="control"><input id="weight" type="number" step="any" autocomplete="off"><span class="unit">kg</span></div>
+    </div>
+    <div class="row">
+      <label for="systolic">Systolic blood pressure</label>
+      <div class="control"><input id="systolic" type="number" step="any" autocomplete="off"><span class="unit">mmHg</span></div>
+    </div>
+    <div class="row">
+      <label for="diastolic">Diastolic blood pressure</label>
+      <div class="control"><input id="diastolic" type="number" step="any" autocomplete="off"><span class="unit">mmHg</span></div>
+    </div>
+    <div class="row">
+      <label for="heart-rate">Heart rate</label>
+      <div class="control"><input id="heart-rate" type="number" step="any" autocomplete="off"><span class="unit">bpm</span></div>
+    </div>
+    <div class="row">
+      <label for="position">Position during measurement</label>
+      <div class="control"><input id="position" type="text" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <h2>Lifestyle</h2>
+  <div class="card">
+    <div class="row">
+      <label for="smoking">Smoking status</label>
+      <div class="control">
+        <select id="smoking" autocomplete="off">
+          <option value="">Select…</option>
+          <option value="never">Never smoked</option>
+          <option value="former">Former smoker</option>
+          <option value="current">Current smoker</option>
+        </select>
+      </div>
+    </div>
+    <fieldset class="row">
+      <legend>Fasting before the visit</legend>
+      <div class="choices">
+        <label><input type="radio" name="fasting" value="yes" autocomplete="off"> Yes</label>
+        <label><input type="radio" name="fasting" value="no" autocomplete="off"> No</label>
+      </div>
+    </fieldset>
+  </div>
+</main>
+</body>
+</html>
